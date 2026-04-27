@@ -1,2 +1,6 @@
-ht/mbds/charles/tp1/jsf/Bb.class
 ht/mbds/charles/tp1/jsf/Modificateur.class
+ht/mbds/charles/llm/JsonAdapterPourGemini.class
+ht/mbds/charles/llm/RequeteException.class
+ht/mbds/charles/llm/LlmClientPourGemini.class
+ht/mbds/charles/llm/LlmInteraction.class
+ht/mbds/charles/tp1/jsf/Bb.class

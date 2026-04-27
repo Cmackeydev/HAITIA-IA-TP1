@@ -9,7 +9,11 @@ import jakarta.inject.Named;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import ht.mbds.charles.llm.JsonAdapterPourGemini;
+import ht.mbds.charles.llm.LlmInteraction;
 
 /**
  * Backing bean pour la page JSF index.xhtml.
@@ -70,7 +74,7 @@ public class Bb implements Serializable {
      * Service pour modifier la question et générer la réponse.
      */
     @Inject
-    private Modificateur modificateur;
+    private JsonAdapterPourGemini jsonAdapter;
 
     /**
      * Contexte JSF. Utilisé pour qu'un message d'erreur s'affiche dans le formulaire.
@@ -158,10 +162,21 @@ public class Bb implements Serializable {
         String roleSystemePourModification = null;
         if (this.conversation.isEmpty()) { // Si la conversation n'a pas encore commencé
             roleSystemePourModification = this.roleSysteme; // Pour Modificateur.modifier()
-            // Invalide la liste pour changer le rôle système
+            jsonAdapter.setSystemRole(this.roleSysteme);
             this.roleSystemeChangeable = false;
         }
-        this.reponse = this.modificateur.modifier(this.question, roleSystemePourModification);
+        try {
+  LlmInteraction interaction = jsonAdapter.envoyerRequete(question);
+  this.reponse = interaction.reponseExtraite();
+  this.texteRequeteJson = interaction.questionJson();
+  this.texteReponseJson = interaction.reponseJson();
+} catch (Exception e) {
+   FacesMessage message = 
+       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Problème de connexion avec l'API du LLM", 
+                        "Problème de connexion avec l'API du LLM" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+   facesContext.addMessage(null, message);
+}
 
         // La conversation contient l'historique des questions-réponses depuis le début.
         afficherConversation();
