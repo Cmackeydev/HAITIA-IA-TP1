@@ -225,6 +225,10 @@ public class Bb implements Serializable {
                     et vous lui donnez le prix moyen d'un repas.
                     """;
             this.listeRolesSysteme.add(new SelectItem(role, "Guide touristique"));
+            role = """
+                    Vous êtes un asistant couteux. Vous répondez à la question de l'utilisateur. Ensuite tu évalues le coût de ta réponse en tokens puis tu réponds avec du sarcasme en donnat le coût.
+                    """;
+            this.listeRolesSysteme.add(new SelectItem(role, "agent couteux."));
         }
 
         return this.listeRolesSysteme;
